@@ -1,9 +1,12 @@
 #include <iostream>
+#include <cstdlib>
 #include <ctime>
 
 using namespace std;
 
 enum State { FIRST, MATCH, NO_MATCH };
+
+// To clear the screen, look up ANSI escape codes
 // Concentration game model
 // The model manages the state of the game
 class Model {
@@ -58,6 +61,10 @@ public:
         model = new Model(8,8);
         view = new View;
     }
+    ~Controller() {
+        delete model;
+        delete view;
+    }
     // Event loop
     void loop();
 private:
@@ -72,16 +79,21 @@ Model::Model(int w, int h) {
     lastRow = -1;
     lastColumn = -1;
     state = FIRST;
-    grid = new char*[h];
-    visible = new char*[h];
+    grid = new char*[height];
+    visible = new char*[height];
+    // For every row, create the array for that row
     for (int i = 0; i < height; i++) {
-        grid[i] = new char[w];
-        visible[i] = new char[w];
+        grid[i] = new char[width];
+        visible[i] = new char[width];
     }
+    srand(time(0));
     // TODO: make this random-ish
+    // Look at asciitable.com and do some stuff with rand() % number
+    // Hint: insert characters in order, then shuffle later in a separate loop
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             grid[i][j] = 'a';
+            // Everything's invisible at first
             visible[i][j] = '*';
         }
     }
@@ -116,7 +128,7 @@ void Model::flip(int row, int column) {
         // Otherwise, make the last cell invisible (set it to *)
     // Make the current cell visible
 }
-// If everything is visible, then it's game over
+// TODO: If everything is visible, then it's game over
 bool Model::gameOver() {
     // Hint: assume the game is over, unless it isn't
     // Hint: Loop through the grid and see if any element is not visible
@@ -159,6 +171,7 @@ void Controller::loop() {
         cin >> col;
         model->flip(row, col);
     }
+    cout << "Hooray, you win!" << endl;
 }
 
 int main() {

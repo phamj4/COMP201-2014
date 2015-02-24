@@ -45,7 +45,13 @@ public:
     }
     void push_front(T element) {
         Node<T> * node = new Node<T>(element, head);
+        if (head != NULL) {
+            head->prev = node;
+        }
         head = node;
+        if (tail == NULL) {
+            tail = node;
+        }
     }
     T peek_front() {
         return head->data;
@@ -54,6 +60,11 @@ public:
         Node<T> * node = head->next;
         delete head;
         head = node;
+        if (node != NULL) {
+            node->prev = NULL;
+        } else {
+            tail = head;
+        }
     }
     void push_back(T element) {
     
@@ -66,6 +77,21 @@ public:
     }
     bool empty() {
         return head == NULL && tail == NULL;
+    }
+    Node<T> * begin() { return head; }
+    Node<T> * end()   { return NULL; }
+    Node<T> * last()  { return tail; }
+    int size() {
+        int result = 0;
+        
+        for (Node<T> * pointer = head;
+            pointer != NULL;
+            pointer = pointer->next )
+        {
+            result++;
+        }
+        
+        return result;
     }
 private:
     Node<T> * head;

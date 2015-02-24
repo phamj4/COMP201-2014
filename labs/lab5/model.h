@@ -23,6 +23,7 @@ public:
     void crawl();
     // Is the game over?
     bool gameOver();
+    // TODO: swap this out with your own list implementation
     // The snake
     std::list<Coordinate> snake;
     // The food

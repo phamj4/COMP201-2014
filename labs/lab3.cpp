@@ -11,170 +11,217 @@ enum State { FIRST, MATCH, NO_MATCH };
 // The model manages the state of the game
 class Model {
 public:
-    // Constructor (instantiates object)
-    // Initialize a grid of letters randomly
-    Model(int w, int h);
-    // Destructor deletes all dynamically allocated stuff
-    ~Model();
-    // Methods (member functions)
-    // Return the width
-    int getWidth();
-    // Return the height
-    int getHeight();
-    // Return visible stuff (invisible stuff is shown with character *)
-    char get(int row, int column);
-    // Flip this row/column
-    void flip(int row, int column);
-    // Is the game over?
-    bool gameOver();
+	// Constructor (instantiates object)
+	// Initialize a grid of letters randomly
+	Model(int w, int h);
+	// Destructor deletes all dynamically allocated stuff
+	~Model();
+	// Methods (member functions)
+	// Return the width
+	int getWidth();
+	// Return the height
+	int getHeight();
+	// Return visible stuff (invisible stuff is shown with character *)
+	char get(int row, int column);
+	// Flip this row/column
+	void flip(int row, int column);
+	// Is the game over?
+	bool gameOver();
 private:
-    // Is the row/column valid?
-    bool valid(int row, int column);
-    // Did the cell at current row/column match the cell at the last row/column 
-    bool matched(int row, int column);
-    // Fields (member data)
-    // Randomly generated grid. This has pairs of characters in it
-    char ** grid;
-    // What is visible to the user?
-    char ** visible;
-    // What's the width?
-    int width;
-    // What's the height?
-    int height;
-    // What'd we flip last?
-    int lastRow;
-    int lastColumn;
-    State state;
+	// Is the row/column valid?
+	bool valid(int row, int column);
+	// Did the cell at current row/column match the cell at the last row/column 
+	bool matched(int row, int column);
+	// Fields (member data)
+	// Randomly generated grid. This has pairs of characters in it
+	char ** grid;
+	// What is visible to the user?
+	char ** visible;
+	// What's the width?
+	int width;
+	// What's the height?
+	int height;
+	// What'd we flip last?
+	int lastRow;
+	int lastColumn;
+	State state;
 };
 
 // Show (output) the state of the model
 class View {
 public:
-    // Print out the visible stuff in the grid
-    void show(Model * model);
+	// Print out the visible stuff in the grid
+	void show(Model * model);
 };
 
 // Handle input
 class Controller {
 public:
-    Controller() {
-        model = new Model(8,8);
-        view = new View;
-    }
-    ~Controller() {
-        delete model;
-        delete view;
-    }
-    // Event loop
-    void loop();
+	Controller() {
+		model = new Model(8, 8);
+		view = new View;
+	}
+	~Controller() {
+		delete model;
+		delete view;
+	}
+	// Event loop
+	void loop();
 private:
-    Model * model;
-    View * view;
+	Model * model;
+	View * view;
 };
 
 // Constructor initializes the object
 Model::Model(int w, int h) {
-    width = w;
-    height = h;
-    lastRow = -1;
-    lastColumn = -1;
-    state = FIRST;
-    grid = new char*[height];
-    visible = new char*[height];
-    // For every row, create the array for that row
-    for (int i = 0; i < height; i++) {
-        grid[i] = new char[width];
-        visible[i] = new char[width];
-    }
-    srand(time(0));
-    // TODO: make this random-ish
-    // Look at asciitable.com and do some stuff with rand() % number
-    // Hint: insert characters in order, then shuffle later in a separate loop
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            grid[i][j] = 'a';
-            // Everything's invisible at first
-            visible[i][j] = '*';
-        }
-    }
-}
-// Destructor deletes dynamically allocated memory
-Model::~Model() {
-    for (int i = 0; i < height; i++) {
-        delete grid[i];
-        delete visible[i];
-    }
-    delete grid;
-    delete visible;
-}
-// TODO: Is the row/column valid?
-// That is, is the row within the height, and is the column within the width?
-// Return whether it is or isn't.
-bool Model::valid(int row, int column) {
-    return true;
-}
-bool Model::matched(int row, int column) {
-    return true;
-}
-// TODO: Flip a cell
-void Model::flip(int row, int column) {
-    // If the row and column are not valid, break out and don't do anything
-    if (!valid(row, column)) { return; }
-    
-    // If the last selected row and column are invalid,
-        // It means we're selecting the first "cell" to flip
-    // Otherwise, we are selecting the next "cell" to flip
-        // If the last cell and the current cell match, great!
-        // Otherwise, make the last cell invisible (set it to *)
-    // Make the current cell visible
-}
-// TODO: If everything is visible, then it's game over
-bool Model::gameOver() {
-    // Hint: assume the game is over, unless it isn't
-    // Hint: Loop through the grid and see if any element is not visible
-    return false;
-}
-int Model::getWidth() {
-    return width;
-}
-int Model::getHeight() {
-    return height;
-}
-char Model::get(int row, int col) {
-    return visible[row][col];
-}
-// Show the model, one cell at a time
-void View::show(Model * model) {
-    for (int j = 0; j < model->getWidth(); j++) {
-        cout << "\t" << j;
-    }
-    cout << endl;
-    for (int i = 0; i < model->getHeight(); i++) {
-        cout << i;
-        for (int j = 0; j < model->getWidth(); j++) {
-            cout << "\t" << model->get(i, j);
-        }
-        cout << endl;
-    }
-}
+	width = w;
+	height = h;
+	lastRow = -1;
+	lastColumn = -1;
+	state = FIRST;
+	grid = new char*[height];
+	visible = new char*[height];
+	// For every row, create the array for that row
+	for (int i = 0; i < height; i++) {
+		grid[i] = new char[width];
+		visible[i] = new char[width];
+	}
+	srand(time(0));
+	// TODO: make this random-ish = done
+	// Look at asciitable.com and do some stuff with rand() % number
+	// Hint: insert characters in order, then shuffle later in a separate loop
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			// Pick a random spot in the grid
+			otheri = rand() % height;
+			otherj = rand() % width;
+			// Swap grid[i][j] with grid[otheri][otherj]
+			letter = grid[i][j];
+			grid[i][j] = grid[otheri][otherj];
+			grid[otheri][otherj] = letter;
+		}
+	}
+	// Destructor deletes dynamically allocated memory
+	Model::~Model() {
+		for (int i = 0; i < height; i++) {
+			delete grid[i];
+			delete visible[i];
+		}
+		delete grid;
+		delete visible;
+	}
+	// TODO: Is the row/column valid? = done
+	// That is, is the row within the height, and is the column within the width?
+	// Return whether it is or isn't.
+	bool Model::valid(int row, int column) {
+		if (row >= 0 && row <= height && column >= 0 && column <= width)
+			return true;
+		else
+			return false;
+	}
+	bool Model::matched(int row, int column) {
+		if (grid[row][column] == grid[lastRow][lastColumn])
+			return true;
+		else
+			return false;
+	}
+	// TODO: Flip a cell = done
+	void Model::flip(int row, int column) {
+		// If the row and column are not valid, break out and don't do anything
+		if (!valid(row, column)) { return; }
+		visible[row][column] = grid[row][column];
 
-// Show the board
-// Read in coordinates
-// Until we're done
-void Controller::loop() {
-    int row, col;
-    while (!model->gameOver()) {
-        view->show(model);
-        cout << "Enter row:    ";
-        cin >> row;
-        cout << "Enter column: ";
-        cin >> col;
-        model->flip(row, col);
-    }
-    cout << "Hooray, you win!" << endl;
-}
+		switch (state) {
+		case INIT:
+			// clear out lastRow and lastColumn
+			lastRow.clear();
+			lastColumn.clear();
+			state = FIRST;
+			break;
+		case FIRST:
+			if (grid[row][column] == grid[lastRow[0]][lastColumn[0]])
+			{
+				state = INIT;
+			}
+			else
+			{
+				state = NO_MATCH;
+			}
+			break;
 
-int main() {
-    Controller c;
-    c.loop();
-}
+		case NO_MATCH:
+			for (int i = 0; i < lastRow.size(); i++)
+			{
+				visible[lastRow[i]][lastColumn[i]] = '*';
+			}
+			lastRow.clear();
+			lastColumn.clear();
+			state = FIRST;
+			break;
+		}
+		lastRow.push_back(row);
+		lastColumn.push_back(column);
+	}
+	// TODO: If everything is visible, then it's game over = done
+	bool Model::gameOver() {
+		// Hint: assume the game is over, unless it isn't
+		bool isOver = true;
+		// Loop through the grid and see if any element is not visible
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				if (visible[i][j] == '_') {
+					isOver = false;
+				}
+			}
+		}
+
+		if (isOver) {
+			// Set a nice game over message
+			for (int i = 0; i < height; i++) {
+				for (int j = 0; j < width; j++) {
+					visible[i][j] = '_';
+				}
+				int Model::getWidth() {
+					return width;
+				}
+				int Model::getHeight() {
+					return height;
+				}
+				char Model::get(int row, int col) {
+					return visible[row][col];
+				}
+				// Show the model, one cell at a time
+				void View::show(Model * model) {
+					for (int j = 0; j < model->getWidth(); j++) {
+						cout << "\t" << j;
+					}
+					cout << endl;
+					for (int i = 0; i < model->getHeight(); i++) {
+						cout << i;
+						for (int j = 0; j < model->getWidth(); j++) {
+							cout << "\t" << model->get(i, j);
+						}
+						cout << endl;
+					}
+				}
+
+				// Show the board
+				// Read in coordinates
+				// Until we're done
+				void Controller::loop() {
+					int row, col;
+					while (!model->gameOver()) {
+						view->show(model);
+						cout << "Enter row:    ";
+						cin >> row;
+						cout << "Enter column: ";
+						cin >> col;
+						model->flip(row, col);
+					}
+					cout << "Hooray, you win!" << endl;
+				}
+
+				int main() {
+					Controller c;
+					c.loop();
+				}

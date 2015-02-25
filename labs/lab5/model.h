@@ -23,6 +23,10 @@ public:
     void crawl();
     // Is the game over?
     bool gameOver();
+    // Did we just collide with food?
+    bool eating();
+    // Quit the game
+    void end();
     // TODO: swap this out with your own list implementation
     // The snake
     std::list<Coordinate> snake;
@@ -34,6 +38,8 @@ public:
     int width;
     // What's the height?
     int height;
+private:
+    bool ended;
 };
 
 #endif

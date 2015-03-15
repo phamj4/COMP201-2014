@@ -61,9 +61,11 @@ Model::~Model() {
 // That is, is the row within the height, and is the column within the width?
 // Return whether it is or isn't.
 bool Model::valid(int row, int column) {
+	if (row >= 0 && row <= height && column >= 0 && column <= width)
     return true;
 }
 bool Model::matched(int row, int column) {
+	if (grid[row][column] == grid[lastRow][lastColumn])
     return true;
 }
 // TODO: Flip a cell
@@ -81,10 +83,25 @@ void Model::flip(int row, int column) {
     case FIRST:
         // Check to see if the grid at last row and column match what's in the grid the current column
         // set the state accordingly
+		if (grid[row][column] == grid[lastRow[0]][lastColumn[0]])
+		{
+			state = INIT;
+		}
+		else
+		{
+			state = NO_MATCH;
+		}
         break;
     case NO_MATCH:
         // clear out the visible state in the last two rows/columns
         // go to the first state
+		for (int i = 0; i < lastRow.size(); i++)
+		{
+			visible[lastRow[i]][lastColumn[i]] = '*';
+		}
+		lastRow.clear();
+		lastColumn.clear();
+		state = FIRST;
         break;
     }
     lastRow.push_back(row);

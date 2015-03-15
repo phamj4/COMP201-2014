@@ -93,6 +93,13 @@ Model::Model(int w, int h) {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             grid[i][j] = 'a';
+			// Pick a random spot in the grid
+			otheri = rand() % height;
+			otherj = rand() % width;
+			// Swap grid[i][j] with grid[otheri][otherj]
+			letter = grid[i][j];
+			grid[i][j] = grid[otheri][otherj];
+			grid[otheri][otherj] = letter;
             // Everything's invisible at first
             visible[i][j] = '*';
         }
@@ -111,16 +118,49 @@ Model::~Model() {
 // That is, is the row within the height, and is the column within the width?
 // Return whether it is or isn't.
 bool Model::valid(int row, int column) {
+	if (row >= 0 && row <= height && column >= 0 && column <= width)
     return true;
 }
 bool Model::matched(int row, int column) {
+	if (grid[row][column] == grid[lastRow][lastColumn])
     return true;
 }
 // TODO: Flip a cell
 void Model::flip(int row, int column) {
     // If the row and column are not valid, break out and don't do anything
     if (!valid(row, column)) { return; }
-    
+	visible[row][column] = grid[row][column];
+
+	switch (state) {
+	case INIT:
+		// clear out lastRow and lastColumn
+		lastRow.clear();
+		lastColumn.clear();
+		state = FIRST;
+		break;
+	case FIRST:
+		if (grid[row][column] == grid[lastRow[0]][lastColumn[0]])
+		{
+			state = INIT;
+		}
+		else
+		{
+			state = NO_MATCH;
+		}
+		break;
+
+	case NO_MATCH:
+		for (int i = 0; i < lastRow.size(); i++)
+		{
+			visible[lastRow[i]][lastColumn[i]] = '*';
+		}
+		lastRow.clear();
+		lastColumn.clear();
+		state = FIRST;
+		break;
+	}
+	lastRow.push_back(row);
+	lastColumn.push_back(column);
     // If the last selected row and column are invalid,
         // It means we're selecting the first "cell" to flip
     // Otherwise, we are selecting the next "cell" to flip
@@ -131,7 +171,11 @@ void Model::flip(int row, int column) {
 // TODO: If everything is visible, then it's game over
 bool Model::gameOver() {
     // Hint: assume the game is over, unless it isn't
-    // Hint: Loop through the grid and see if any element is not visible
+	// Loop through the grid and see if any element is not visible
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			if (visible[i][j] == '_') {
+				isOver = false;
     return false;
 }
 int Model::getWidth() {

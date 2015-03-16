@@ -29,7 +29,8 @@ The code has TODO items in it.
 . You need to detect collisions with the head of the snake and:
 .. *food*. This should grow the snake and randomly place the food somewhere else.
 .. *the perimeter of the screen*. This should kill the snake.
-.. *the snake itself*. This should kill the snake.
+.. *the snake itself*. This should kill the snake. Detect collisions with the head of the snake
+   along with the rest of the body (everything in the snake other than the head)
 . Swap out `std::list` with your own implementation of a doubly-linked list in `list.cpp`.
 
 Also, if you're up for a challenge, try to modify the view to render the snake

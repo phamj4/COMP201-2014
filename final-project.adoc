@@ -15,6 +15,7 @@ simulator, solitaire, side scroller.
 * Who's going to do what?
 ** Artwork
 ** Game logic (Model)
+*** The underlying data structure (Stucts? Lists? Vectors? Arrays?)
 *** E.g., collision detection, is the game over, etc.
 ** Handling input events (Controller)
 ** Rendering the game to the screen (View)
